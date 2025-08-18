@@ -66,7 +66,7 @@ function copiarAlPortapapeles() {
 function enviarWhatsApp() {
   const { resumen } = obtenerDatos();
   const mensaje = encodeURIComponent(resumen);
-  const numero = "542245477140"; // Número en formato internacional sin signos
+  const numero = "5491168650195"; // Número en formato internacional sin signos
   const url = `https://wa.me/${numero}?text=${mensaje}`;
   window.open(url, "_blank");
 
@@ -133,4 +133,5 @@ function generateQR(texto) {
   const script = document.createElement("script");
   script.src = "https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js";
   document.head.appendChild(script);
+
 })();
