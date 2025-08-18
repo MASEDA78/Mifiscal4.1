@@ -9,7 +9,7 @@ html, body {
 }
 
 .background {
-  background-image: url('https://github.com/MASEDA78/Mifiscal4.1/blob/main/desender.png');
+  background-image: url('<img src="desender.png" alt="Defender Castelli" class="logo-home" />');
   background-size: cover;
   background-position: center;
   filter: blur(3px) brightness(0.7);
@@ -143,3 +143,4 @@ iframe#iframeBox {
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 
 }
+
