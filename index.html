@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mi Fiscal de Mesa 4.0</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="background"></div>
+
+  <!-- MENÚ PRINCIPAL -->
+  <div class="container fade-in" id="home" style="display:block">
+     <img src="https://raw.githubusercontent.com/MASEDA78/MASEDA78-Mifiscal4.1/main/desender.png" alt="Defender Castelli" class="logo-home" />
+    <div class="banner">
+      Bienvenido/a al sistema de fiscalización 2025 – Comando Electoral PJ Castelli
+    </div>
+    <h1>Mi Fiscal de Mesa 4.0</h1>
+    <button onclick="openIframe('https://elecciones.castelli.gob.ar/acceso.php?origen=m')">Registro de Votos</button>
+    <button onclick="openIframe('https://elecciones.castelli.gob.ar/mesas.php')">Consulta Estadísticas</button>
+    <button onclick="showForm()">Informar votos a Concejales</button>
+  </div>
+
+  <!-- VISTA IFRAME -->
+  <div class="iframe-container" id="iframeView" style="display:none">
+    <button onclick="goHome()">Volver al inicio</button>
+    <iframe id="iframeBox" src=""></iframe>
+  </div>
+
+  <!-- FORMULARIO -->
+  <div class="form-container" id="voteForm" style="display:none">
+    <h2>Informar votos</h2>
+    <label for="fiscal">Nombre del Fiscal</label>
+    <input type="text" id="fiscal" placeholder="Nombre del Fiscal" />
+
+    <label for="mesa">Número de Mesa</label>
+    <input type="number" id="mesa" placeholder="Número de Mesa" />
+
+    <label for="padron">Cantidad de electores habilitados</label>
+    <input type="number" id="padron" placeholder="Total padrón de la mesa" />
+
+    <label for="cand1">1️⃣ FUERZA PATRIA – Macias, María Eugenia</label>
+    <input type="number" id="cand1" placeholder="Votos Fuerza Patria" />
+
+    <label for="cand2">2️⃣ SOMOS BUENOS AIRES – Aristizabal, Juan Martín</label>
+    <input type="number" id="cand2" placeholder="Votos Somos Buenos Aires" />
+
+    <label for="cand3">3️⃣ LLA-PRO – Sosa, Sergio Gustavo</label>
+    <input type="number" id="cand3" placeholder="Votos LLA-PRO" />
+
+    <label for="cand4">4️⃣ Union Liberal – Camara, Nahuel</label>
+    <input type="number" id="cand4" placeholder="Votos Union Liberal" />
+
+    <label for="blanco">Votos en Blanco</label>
+    <input type="number" id="blanco" placeholder="Votos en Blanco" />
+
+    <label for="nulo">Votos Nulos</label>
+    <input type="number" id="nulo" placeholder="Votos Nulos" />
+
+    <label for="impugnado">Votos Impugnados</label>
+    <input type="number" id="impugnado" placeholder="Votos Impugnados" />
+
+    <button onclick="copiarAlPortapapeles()">Copiar al portapapeles</button>
+    <button onclick="enviarWhatsApp()">Enviar por WhatsApp</button>
+    <button onclick="descargarPDF()">Descargar Acta en PDF</button>
+    <button onclick="goHome()">Volver al inicio</button>
+
+    <div id="resumen"></div>
+  </div>
+
+  <script src="script.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</body>
+</html>

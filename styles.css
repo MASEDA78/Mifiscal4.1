@@ -1,0 +1,144 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 100vw;
+  font-family: 'Segoe UI', sans-serif;
+  overflow: hidden;
+  background-color: #f4f4f4;
+}
+
+.background {
+  background-image: url('https://chequeado.com/wp-content/uploads/2023/07/Desinformacion-nuevo-25.png');
+  background-size: cover;
+  background-position: center;
+  filter: blur(3px) brightness(0.7);
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+}
+
+.container,
+.form-container,
+.iframe-container {
+  width: 90vw;
+  max-height: 90vh;
+  margin: auto;
+  padding: 1.5rem;
+  overflow-y: auto;
+  background-color: rgba(255, 255, 255, 0.94);
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  text-align: center;
+}
+
+h1, h2 {
+  margin-bottom: 1rem;
+  color: #003f7f;
+}
+
+input {
+  width: 100%;
+  margin: 8px 0;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0,123,255,0.4);
+}
+
+#fiscal {
+  font-weight: bold;
+  border-left: 4px solid #007bff;
+  background-color: #f9f9ff;
+}
+
+button {
+  width: 100%;
+  margin: 10px 0;
+  padding: 12px;
+  font-size: 15px;
+  font-weight: bold;
+  background: linear-gradient(to right, #007bff, #0056b3);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  cursor: pointer;
+  transition: background 0.3s, transform 0.1s;
+}
+
+button:hover {
+  background: linear-gradient(to right, #0056b3, #003f7f);
+  transform: translateY(-1px);
+}
+
+iframe#iframeBox {
+  width: 100%;
+  height: calc(100vh - 160px);
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+#resumen {
+  white-space: pre-wrap;
+  margin-top: 1rem;
+  font-family: monospace;
+  color: #003f7f;
+  background-color: #eef7ff;
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: left;
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeUp 1s ease-out forwards;
+}
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  h1 { font-size: 1.5rem; }
+  h2 { font-size: 1.2rem; }
+  input, button { font-size: 14px; }
+  iframe#iframeBox { height: 70vh; }
+}
+
+@media (max-width: 480px) {
+  input, button { font-size: 13px; }
+  iframe#iframeBox { height: 65vh; }
+}
+
+.logo-home {
+  max-width: 180px;
+  margin: 0 auto 20px;
+  display: block;
+}
+
+.banner {
+  background-color: #003f7f;
+  color: #ffffff;
+  padding: 12px;
+  margin-bottom: 20px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
