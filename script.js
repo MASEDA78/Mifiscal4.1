@@ -110,7 +110,7 @@ function descargarPDF() {
   const lines = doc.splitTextToSize(resumen, 170);
   doc.text(lines, 20, 35);
 
-  const qrText = `https://elecciones.castelli.gob.ar/mesas.php?mesa=${mesa}`;
+  const qrText = `Acta de Fiscalización – Elecciones 2025 COMANDO ELECTORAL PJ`;
   doc.addImage(generateQR(qrText), "PNG", 150, 250, 40, 40);
 
   const nombreArchivo = `Acta_Mesa_${mesa}_${fiscal.replace(/\s+/g, "_")}.pdf`;
@@ -135,3 +135,4 @@ function generateQR(texto) {
   document.head.appendChild(script);
 
 })();
+
