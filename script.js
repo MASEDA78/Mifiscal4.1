@@ -28,11 +28,15 @@ function obtenerDatos() {
   const cand3 = parseInt(document.getElementById("cand3").value) || 0;
   const cand4 = parseInt(document.getElementById("cand4").value) || 0;
   const blanco = parseInt(document.getElementById("blanco").value) || 0;
- 
-  const validos = cand1 + cand2 + cand3 + cand4;
-  const total = validos + blanco ;
 
-  const porcentaje = (votos) => padron > 0 ? ((votos / validos) * 100).toFixed(2) + "%" : "–";
+  const validos = cand1 + cand2 + cand3 + cand4;
+  const total = validos + blanco;
+
+  // ✅ Corregido: el porcentaje depende de votos válidos, no del padrón
+  const porcentaje = (votos) => validos > 0 ? ((votos / validos) * 100).toFixed(2) + "%" : "–";
+
+  // 📈 Participación (total sobre padrón)
+  const participacion = padron > 0 ? ((total / padron) * 100).toFixed(2) + "%" : "–";
 
   const resumen = `🗳️ Fiscal: ${fiscal}
 Mesa: ${mesa}
@@ -46,7 +50,8 @@ Electores habilitados: ${padron}
 🟦 Blanco: ${blanco}
 
 ✅ Votos válidos: ${validos}
-📊 Total votos emitidos: ${total}`;
+📊 Total votos emitidos: ${total}
+📈 Participación: ${participacion}`;
 
   return { fiscal, mesa, resumen };
 }
@@ -90,8 +95,6 @@ function enviarWhatsApp() {
   }
 }
 
-
-
 function descargarPDF() {
   const { fiscal, mesa, resumen } = obtenerDatos();
   const { jsPDF } = window.jspdf;
@@ -107,7 +110,8 @@ function descargarPDF() {
   doc.text(lines, 20, 35);
 
   const qrText = `Acta de Fiscalización – Elecciones 2025 COMANDO ELECTORAL PJ`;
-  doc.addImage(generateQR(qrText), "PNG", 150, 250, 40, 40);
+  const pageHeight = doc.internal.pageSize.height;
+  doc.addImage(generateQR(qrText), "PNG", 150, pageHeight - 50, 40, 40);
 
   const nombreArchivo = `Acta_Mesa_${mesa}_${fiscal.replace(/\s+/g, "_")}.pdf`;
   doc.save(nombreArchivo);
@@ -128,8 +132,6 @@ function generateQR(texto) {
 (function cargarQRious() {
   const script = document.createElement("script");
   script.src = "https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js";
+  script.onload = () => console.log("QRious cargado correctamente ✅");
   document.head.appendChild(script);
-
 })();
-
-
