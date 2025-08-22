@@ -32,7 +32,7 @@ function obtenerDatos() {
   const validos = cand1 + cand2 + cand3 + cand4;
   const total = validos + blanco;
 
-  // ✅ Corregido: el porcentaje depende de votos válidos, no del padrón
+  // ✅ Porcentaje sobre válidos
   const porcentaje = (votos) => validos > 0 ? ((votos / validos) * 100).toFixed(2) + "%" : "–";
 
   // 📈 Participación (total sobre padrón)
@@ -53,7 +53,7 @@ Electores habilitados: ${padron}
 📊 Total votos emitidos: ${total}
 📈 Participación: ${participacion}`;
 
-  return { fiscal, mesa, resumen };
+  return { fiscal, mesa, padron, cand1, cand2, cand3, cand4, blanco, validos, total, resumen };
 }
 
 function copiarAlPortapapeles() {
@@ -128,10 +128,6 @@ function generateQR(texto) {
   return canvas.toDataURL("image/png");
 }
 
-// Cargar QRious dinámicamente
-(function cargarQRious() {
-  const script = document.createElement("script");
-  script.src = "https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js";
-  script.onload = () => console.log("QRious cargado correctamente ✅");
-  document.head.appendChild(script);
-})();
+// ✅ Nueva función: Verificación de resultados
+function verificarResultados() {
+  const { cand1, cand2, cand3
