@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Mi Fiscal de Mesa 4.0</title>
   <link rel="stylesheet" href="styles.css" />
+
+  <!-- Librerías necesarias -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrious/dist/qrious.min.js"></script>
 </head>
 <body>
   <div class="background"></div>
@@ -14,7 +18,6 @@
      <img src="https://raw.githubusercontent.com/MASEDA78/Mifiscal4.1/main/desender.png" 
      alt="Defender Castelli" 
      class="logo-home">
-
 
     <div class="banner">
       Bienvenido/a al sistema de fiscalización 2025 – Comando Electoral PJ Castelli
@@ -58,6 +61,11 @@
     <label for="blanco">Votos en Blanco</label>
     <input type="number" id="blanco" placeholder="Votos en Blanco" />
 
+    <label for="nulo">Votos Nulos</label>
+    <input type="number" id="nulo" placeholder="Votos Nulos" />
+
+    <label for="impugnado">Votos Impugnados</label>
+    <input type="number" id="impugnado" placeholder="Votos Impugnados" />
 
     <button onclick="copiarAlPortapapeles()">Copiar al portapapeles</button>
     <button onclick="enviarWhatsApp()">Enviar por WhatsApp</button>
@@ -67,12 +75,7 @@
     <div id="resumen"></div>
   </div>
 
+  <!-- Script principal -->
   <script src="script.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </body>
-
 </html>
-
-
-
-
