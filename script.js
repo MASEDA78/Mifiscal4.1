@@ -1,4 +1,22 @@
 // ==========================
+// LOGIN
+// ==========================
+function login() {
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const loginError = document.getElementById("loginError");
+
+  if (username === "fiscalw" && password === "F2025") {
+    // Acceso permitido
+    document.getElementById("loginScreen").style.display = "none";
+    document.getElementById("home").style.display = "block";
+    loginError.innerText = "";
+  } else {
+    loginError.innerText = "Usuario o clave incorrecta";
+  }
+}
+
+// ==========================
 // NAVEGACIÓN ENTRE VISTAS
 // ==========================
 function showForm() {
