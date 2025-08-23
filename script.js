@@ -1,19 +1,35 @@
 // ==========================
-// LOGIN
+// LOGIN CON RECORDATORIO DE SESIÓN
 // ==========================
+document.addEventListener("DOMContentLoaded", () => {
+  const usuarioGuardado = localStorage.getItem("usuario");
+  if (usuarioGuardado === "fiscalw") {
+    document.getElementById("loginScreen").style.display = "none";
+    document.getElementById("home").style.display = "block";
+  }
+});
+
 function login() {
   const username = document.getElementById("username").value.trim();
   const password = document.getElementById("password").value.trim();
   const loginError = document.getElementById("loginError");
 
   if (username === "fiscalw" && password === "F2025") {
-    // Acceso permitido
+    localStorage.setItem("usuario", username); 
     document.getElementById("loginScreen").style.display = "none";
     document.getElementById("home").style.display = "block";
     loginError.innerText = "";
   } else {
     loginError.innerText = "Usuario o clave incorrecta";
   }
+}
+
+function logout() {
+  localStorage.removeItem("usuario");
+  document.getElementById("home").style.display = "none";
+  document.getElementById("loginScreen").style.display = "block";
+  document.getElementById("username").value = "";
+  document.getElementById("password").value = "";
 }
 
 // ==========================
