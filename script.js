@@ -34,11 +34,9 @@ function obtenerDatos() {
   const cand3 = parseInt(document.getElementById("cand3").value) || 0;
   const cand4 = parseInt(document.getElementById("cand4").value) || 0;
   const blanco = parseInt(document.getElementById("blanco").value) || 0;
-  const nulo = parseInt(document.getElementById("nulo").value) || 0;
-  const impugnado = parseInt(document.getElementById("impugnado").value) || 0;
 
   const validos = cand1 + cand2 + cand3 + cand4;
-  const total = validos + blanco + nulo + impugnado;
+  const total = validos + blanco;
 
   const porcentaje = (votos) => validos > 0 ? ((votos / validos) * 100).toFixed(2) + "%" : "–";
   const participacion = padron > 0 ? ((total / padron) * 100).toFixed(2) + "%" : "–";
@@ -53,14 +51,12 @@ Electores habilitados: ${padron}
 4️⃣ UNION LIBERAL – ${cand4} votos (${porcentaje(cand4)})
 
 🟦 Blanco: ${blanco}
-❌ Nulos: ${nulo}
-⚠️ Impugnados: ${impugnado}
 
 ✅ Votos válidos: ${validos}
 📊 Total votos emitidos: ${total}
 📈 Participación: ${participacion}`;
 
-  return { fiscal, mesa, padron, cand1, cand2, cand3, cand4, blanco, nulo, impugnado, validos, total, resumen };
+  return { fiscal, mesa, padron, cand1, cand2, cand3, cand4, blanco, validos, total, resumen };
 }
 
 // ==========================
