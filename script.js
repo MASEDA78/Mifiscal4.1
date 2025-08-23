@@ -40,10 +40,7 @@ function obtenerDatos() {
   const validos = cand1 + cand2 + cand3 + cand4;
   const total = validos + blanco + nulo + impugnado;
 
-  // Porcentaje sobre válidos
   const porcentaje = (votos) => validos > 0 ? ((votos / validos) * 100).toFixed(2) + "%" : "–";
-
-  // Participación (total sobre padrón)
   const participacion = padron > 0 ? ((total / padron) * 100).toFixed(2) + "%" : "–";
 
   const resumen = `🗳️ Fiscal: ${fiscal}
@@ -101,15 +98,13 @@ function enviarWhatsApp() {
   if (!verificarResultados()) return;
   const { resumen } = obtenerDatos();
   const mensaje = encodeURIComponent(resumen);
-  const numero = "5491168650195"; // Número internacional
+  const numero = "5491168650195";
   const url = `https://wa.me/${numero}?text=${mensaje}`;
   window.open(url, "_blank");
 
-  // Limpiar campos numéricos
   document.querySelectorAll("#voteForm input[type='number']").forEach(input => input.value = 0);
   document.getElementById("resumen").innerText = "";
 
-  // Ocultar botón por 1 minuto
   const botonInformar = document.querySelector("button[onclick='showForm()']");
   if (botonInformar) {
     botonInformar.style.display = "none";
@@ -145,7 +140,6 @@ function descargarPDF() {
   const lines = doc.splitTextToSize(resumen, 170);
   doc.text(lines, 20, 35);
 
-  // Agregar QR
   const qrText = `Acta de Fiscalización – Elecciones 2025 COMANDO ELECTORAL PJ`;
   const pageHeight = doc.internal.pageSize.height;
   doc.addImage(generateQR(qrText), "PNG", 150, pageHeight - 50, 40, 40);
@@ -159,7 +153,7 @@ function descargarPDF() {
 // ==========================
 function generateQR(texto) {
   const canvas = document.createElement("canvas");
-  const qr = new QRious({
+  new QRious({
     element: canvas,
     value: texto,
     size: 150,
