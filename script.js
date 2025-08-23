@@ -1,3 +1,6 @@
+// ==========================
+// NAVEGACIÓN ENTRE VISTAS
+// ==========================
 function showForm() {
   document.getElementById("home").style.display = "none";
   document.getElementById("iframeView").style.display = "none";
@@ -19,6 +22,9 @@ function openIframe(url) {
   document.getElementById("iframeBox").src = url;
 }
 
+// ==========================
+// OBTENER DATOS DEL FORMULARIO
+// ==========================
 function obtenerDatos() {
   const fiscal = document.getElementById("fiscal").value.trim();
   const mesa = document.getElementById("mesa").value.trim();
@@ -28,14 +34,16 @@ function obtenerDatos() {
   const cand3 = parseInt(document.getElementById("cand3").value) || 0;
   const cand4 = parseInt(document.getElementById("cand4").value) || 0;
   const blanco = parseInt(document.getElementById("blanco").value) || 0;
+  const nulo = parseInt(document.getElementById("nulo").value) || 0;
+  const impugnado = parseInt(document.getElementById("impugnado").value) || 0;
 
   const validos = cand1 + cand2 + cand3 + cand4;
-  const total = validos + blanco;
+  const total = validos + blanco + nulo + impugnado;
 
-  // ✅ Porcentaje sobre válidos
+  // Porcentaje sobre válidos
   const porcentaje = (votos) => validos > 0 ? ((votos / validos) * 100).toFixed(2) + "%" : "–";
 
-  // 📈 Participación (total sobre padrón)
+  // Participación (total sobre padrón)
   const participacion = padron > 0 ? ((total / padron) * 100).toFixed(2) + "%" : "–";
 
   const resumen = `🗳️ Fiscal: ${fiscal}
@@ -48,15 +56,37 @@ Electores habilitados: ${padron}
 4️⃣ UNION LIBERAL – ${cand4} votos (${porcentaje(cand4)})
 
 🟦 Blanco: ${blanco}
+❌ Nulos: ${nulo}
+⚠️ Impugnados: ${impugnado}
 
 ✅ Votos válidos: ${validos}
 📊 Total votos emitidos: ${total}
 📈 Participación: ${participacion}`;
 
-  return { fiscal, mesa, padron, cand1, cand2, cand3, cand4, blanco, validos, total, resumen };
+  return { fiscal, mesa, padron, cand1, cand2, cand3, cand4, blanco, nulo, impugnado, validos, total, resumen };
 }
 
+// ==========================
+// VERIFICAR RESULTADOS
+// ==========================
+function verificarResultados() {
+  const { padron, total } = obtenerDatos();
+  if (total > padron) {
+    alert("⚠️ Error: El total de votos supera la cantidad de electores habilitados.");
+    return false;
+  }
+  if (total === 0) {
+    alert("⚠️ No hay votos ingresados.");
+    return false;
+  }
+  return true;
+}
+
+// ==========================
+// COPIAR AL PORTAPAPELES
+// ==========================
 function copiarAlPortapapeles() {
+  if (!verificarResultados()) return;
   const { resumen } = obtenerDatos();
   navigator.clipboard.writeText(resumen).then(() => {
     document.getElementById("resumen").innerText = resumen;
@@ -64,20 +94,22 @@ function copiarAlPortapapeles() {
   });
 }
 
+// ==========================
+// ENVIAR POR WHATSAPP
+// ==========================
 function enviarWhatsApp() {
+  if (!verificarResultados()) return;
   const { resumen } = obtenerDatos();
   const mensaje = encodeURIComponent(resumen);
-  const numero = "5491168650195"; // Número en formato internacional sin signos
+  const numero = "5491168650195"; // Número internacional
   const url = `https://wa.me/${numero}?text=${mensaje}`;
   window.open(url, "_blank");
 
-  // ✅ Limpieza de campos
-  document.querySelectorAll("#voteForm input").forEach(input => input.value = "");
-
-  // ✅ Limpieza del resumen visual
+  // Limpiar campos numéricos
+  document.querySelectorAll("#voteForm input[type='number']").forEach(input => input.value = 0);
   document.getElementById("resumen").innerText = "";
 
-  // ✅ Ocultar botón "Informar votos a Concejales" por 1 minuto
+  // Ocultar botón por 1 minuto
   const botonInformar = document.querySelector("button[onclick='showForm()']");
   if (botonInformar) {
     botonInformar.style.display = "none";
@@ -95,7 +127,11 @@ function enviarWhatsApp() {
   }
 }
 
+// ==========================
+// DESCARGAR ACTA EN PDF
+// ==========================
 function descargarPDF() {
+  if (!verificarResultados()) return;
   const { fiscal, mesa, resumen } = obtenerDatos();
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
@@ -109,6 +145,7 @@ function descargarPDF() {
   const lines = doc.splitTextToSize(resumen, 170);
   doc.text(lines, 20, 35);
 
+  // Agregar QR
   const qrText = `Acta de Fiscalización – Elecciones 2025 COMANDO ELECTORAL PJ`;
   const pageHeight = doc.internal.pageSize.height;
   doc.addImage(generateQR(qrText), "PNG", 150, pageHeight - 50, 40, 40);
@@ -117,6 +154,9 @@ function descargarPDF() {
   doc.save(nombreArchivo);
 }
 
+// ==========================
+// GENERAR QR
+// ==========================
 function generateQR(texto) {
   const canvas = document.createElement("canvas");
   const qr = new QRious({
@@ -127,7 +167,3 @@ function generateQR(texto) {
   });
   return canvas.toDataURL("image/png");
 }
-
-// ✅ Nueva función: Verificación de resultados
-function verificarResultados() {
-  const { cand1, cand2, cand3
