@@ -3,7 +3,7 @@
 // ==========================
 document.addEventListener("DOMContentLoaded", () => {
   const usuarioGuardado = localStorage.getItem("usuario");
-  if (usuarioGuardado === "fiscalw") {
+  if (usuarioGuardado === "fiscalweb") {
     document.getElementById("loginScreen").style.display = "none";
     document.getElementById("home").style.display = "block";
   }
@@ -191,4 +191,5 @@ function generateQR(texto) {
   });
   return canvas.toDataURL("image/png");
 }
+
 
