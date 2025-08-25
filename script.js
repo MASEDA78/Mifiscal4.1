@@ -2,8 +2,8 @@
 // LOGIN CON RECORDATORIO DE SESIÓN
 // ==========================
 document.addEventListener("DOMContentLoaded", () => {
-  const usuarioGuardado = localStorage.getItem("usuario");
-  if (usuarioGuardado === "fiscalweb") {
+  const sesionActiva = localStorage.getItem("sesionActiva");
+  if (sesionActiva === "true") {
     document.getElementById("loginScreen").style.display = "none";
     document.getElementById("home").style.display = "block";
   }
@@ -15,17 +15,17 @@ function login() {
   const loginError = document.getElementById("loginError");
 
   if (username === "fiscalweb" && password === "F2025") {
-    localStorage.setItem("usuario", username); 
+    localStorage.setItem("sesionActiva", "true");
     document.getElementById("loginScreen").style.display = "none";
     document.getElementById("home").style.display = "block";
     loginError.innerText = "";
   } else {
-    loginError.innerText = "Usuario o clave incorrecta";
+    loginError.innerText = "❌ Usuario o clave incorrecta";
   }
 }
 
 function logout() {
-  localStorage.removeItem("usuario");
+  localStorage.removeItem("sesionActiva");
   document.getElementById("home").style.display = "none";
   document.getElementById("loginScreen").style.display = "block";
   document.getElementById("username").value = "";
@@ -97,7 +97,12 @@ Electores habilitados: ${padron}
 // VERIFICAR RESULTADOS
 // ==========================
 function verificarResultados() {
-  const { padron, total } = obtenerDatos();
+  const { fiscal, mesa, padron, total } = obtenerDatos();
+
+  if (!fiscal || !mesa) {
+    alert("⚠️ Debes completar los campos Fiscal y Mesa.");
+    return false;
+  }
   if (total > padron) {
     alert("⚠️ Error: El total de votos supera la cantidad de electores habilitados.");
     return false;
@@ -128,13 +133,15 @@ function enviarWhatsApp() {
   if (!verificarResultados()) return;
   const { resumen } = obtenerDatos();
   const mensaje = encodeURIComponent(resumen);
-  const numero = "5491168650195";
+  const numero = "5491168650195"; // <- aquí podés poner el número de recepción
   const url = `https://wa.me/${numero}?text=${mensaje}`;
   window.open(url, "_blank");
 
-  document.querySelectorAll("#voteForm input[type='number']").forEach(input => input.value = 0);
+  // Resetear formulario
+  document.querySelectorAll("#voteForm input").forEach(input => input.value = "");
   document.getElementById("resumen").innerText = "";
 
+  // Cooldown botón
   const botonInformar = document.querySelector("button[onclick='showForm()']");
   if (botonInformar) {
     botonInformar.style.display = "none";
@@ -170,8 +177,13 @@ function descargarPDF() {
   const lines = doc.splitTextToSize(resumen, 170);
   doc.text(lines, 20, 35);
 
-  const qrText = `Acta de Fiscalización – Elecciones 2025 COMANDO ELECTORAL PJ`;
+  // Fecha y hora
+  const fecha = new Date().toLocaleString();
   const pageHeight = doc.internal.pageSize.height;
+  doc.text(`Fecha y hora: ${fecha}`, 20, pageHeight - 20);
+
+  // QR
+  const qrText = `Acta de Fiscalización – Elecciones 2025 COMANDO ELECTORAL PJ`;
   doc.addImage(generateQR(qrText), "PNG", 150, pageHeight - 50, 40, 40);
 
   const nombreArchivo = `Acta_Mesa_${mesa}_${fiscal.replace(/\s+/g, "_")}.pdf`;
@@ -191,6 +203,3 @@ function generateQR(texto) {
   });
   return canvas.toDataURL("image/png");
 }
-
-
-
