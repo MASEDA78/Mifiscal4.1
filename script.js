@@ -57,9 +57,11 @@ function obtenerDatos() {
   const cand1 = parseInt(document.getElementById("cand1").value) || 0;
   const cand2 = parseInt(document.getElementById("cand2").value) || 0;
   const blanco = parseInt(document.getElementById("blanco").value) || 0;
+  const nulo = parseInt(document.getElementById("nulo").value) || 0;
+  const recurrido = parseInt(document.getElementById("recurrido").value) || 0;
 
   const validos = cand1 + cand2;
-  const total = validos + blanco;
+  const total = validos + blanco + nulo + recurrido;
 
   const porcentaje = (votos) => validos > 0 ? ((votos / validos) * 100).toFixed(2) + "%" : "–";
   const participacion = padron > 0 ? ((total / padron) * 100).toFixed(2) + "%" : "–";
@@ -72,12 +74,14 @@ Electores habilitados: ${padron}
 2️⃣ LA LIBERTAD AVANZA – Diego Santilli: ${cand2} votos (${porcentaje(cand2)})
 
 🟦 Blanco: ${blanco}
+🟥 Nulo: ${nulo}
+🟨 Recurrido: ${recurrido}
 
 ✅ Votos válidos: ${validos}
 📊 Total votos emitidos: ${total}
 📈 Participación: ${participacion}`;
 
-  return { fiscal, mesa, padron, cand1, cand2, blanco, validos, total, resumen };
+  return { fiscal, mesa, padron, cand1, cand2, blanco, nulo, recurrido, validos, total, resumen };
 }
 
 function verificarResultados() {
@@ -111,4 +115,62 @@ function enviarWhatsApp() {
   const { resumen } = obtenerDatos();
   const mensaje = encodeURIComponent(resumen);
   const numero = "5491168650195";
-  const url = `https://wa.me
+  const url = `https://wa.me/${numero}?text=${mensaje}`;
+  window.open(url, "_blank");
+
+  document.querySelectorAll("#voteForm input").forEach(input => input.value = "");
+  document.getElementById("resumen").innerText = "";
+
+  const botonInformar = document.querySelector("button[onclick='showForm()']");
+  if (botonInformar) {
+    botonInformar.style.display = "none";
+    const aviso = document.createElement("div");
+    aviso.innerText = "✅ Voto informado. El botón estará disponible nuevamente en 1 minuto.";
+    aviso.style.color = "#007bff";
+    aviso.style.marginTop = "10px";
+    aviso.style.fontWeight = "bold";
+    botonInformar.parentNode.insertBefore(aviso, botonInformar);
+
+    setTimeout(() => {
+      botonInformar.style.display = "block";
+      aviso.remove();
+    }, 60000);
+  }
+}
+
+function descargarPDF() {
+  if (!verificarResultados()) return;
+  const { fiscal, mesa, resumen } = obtenerDatos();
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(16);
+  doc.text("Acta de Fiscalización – Elecciones 2025", 20, 20);
+
+  doc.setFontSize(12);
+  doc.setFont("helvetica", "normal");
+  const lines = doc.splitTextToSize(resumen, 170);
+  doc.text(lines, 20, 35);
+
+  const fecha = new Date().toLocaleString();
+  const pageHeight = doc.internal.pageSize.height;
+  doc.text(`Fecha y hora: ${fecha}`, 20, pageHeight - 20);
+
+  const qrText = `Acta de Fiscalización – Elecciones 2025 COMANDO ELECTORAL PJ`;
+  doc.addImage(generateQR(qrText), "PNG", 150, pageHeight - 50, 40, 40);
+
+  const nombreArchivo = `Acta_Mesa_${mesa}_${fiscal.replace(/\s+/g, "_")}.pdf`;
+  doc.save(nombreArchivo);
+}
+
+function generateQR(texto) {
+  const canvas = document.createElement("canvas");
+  new QRious({
+    element: canvas,
+    value: texto,
+    size: 150,
+    level: "H"
+  });
+  return canvas.toDataURL("image/png");
+}
