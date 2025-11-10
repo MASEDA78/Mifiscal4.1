@@ -11,7 +11,7 @@ function login() {
   const password = document.getElementById("password").value.trim();
   const loginError = document.getElementById("loginError");
 
-  if (username === "fiscalweb" && password === "FW2025") {
+  if (username === "fiscal1web" && password === "FW2025") {
     localStorage.setItem("sesionActiva", "true");
     document.getElementById("loginScreen").style.display = "none";
     document.getElementById("home").style.display = "block";
@@ -174,3 +174,4 @@ function generateQR(texto) {
   });
   return canvas.toDataURL("image/png");
 }
+
